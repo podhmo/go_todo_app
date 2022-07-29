@@ -28,7 +28,7 @@ func (h *ChangeTaskStatus) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var b struct {
-		Status entity.TaskStatus `json:"status" validate:"required"` // todo: enum
+		Status entity.TaskStatus `json:"status" validate:"required,oneof=todo doing done"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&b); err != nil {
 		RespondJSON(ctx, w, &ErrResponse{

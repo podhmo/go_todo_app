@@ -33,6 +33,13 @@ func TestChangeTaskStatus(t *testing.T) {
 				rspFile: "testdata/change_task_status/ok_rsp.json.golden",
 			},
 		},
+		"ng": {
+			reqFile: "testdata/change_task_status/ng_req.json.golden",
+			want: want{
+				status:  http.StatusBadRequest,
+				rspFile: "testdata/change_task_status/ng_rsp.json.golden",
+			},
+		},
 	}
 	for n, tt := range tests {
 		tt := tt
