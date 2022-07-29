@@ -40,3 +40,40 @@ func (r *Repository) ListTasks(
 	}
 	return tasks, nil
 }
+
+func (r *Repository) ChangeTaskStatus(
+	ctx context.Context, db interface {
+		Execer
+		Queryer
+	}, id entity.TaskID, status entity.TaskStatus,
+) (*entity.Task, error) {
+	sql := `Update task
+				SET status=?,
+				WHERE id=?
+			;`
+
+	_, err := db.ExecContext(ctx, sql, id, status)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.GetTaskByID(ctx, db, id)
+}
+
+func (r *Repository) GetTaskByID(
+	ctx context.Context, db Queryer, id entity.TaskID,
+) (*entity.Task, error) {
+	task := entity.Task{}
+	sql := `SELECT 
+				id, title,
+				status, created, modified 
+			FROM task
+			WHERE
+				id=?
+			;`
+
+	if err := db.GetContext(ctx, &task, sql, id); err != nil {
+		return nil, err
+	}
+	return &task, nil
+}

@@ -35,6 +35,10 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 		Service: &service.ListTask{DB: db, Repo: &r},
 	}
 	mux.Get("/tasks", lt.ServeHTTP)
+	cts := &handler.ChangeTaskStatus{
+		Service: &service.ChangeTaskStatus{DB: db, Repo: &r},
+	}
+	mux.Patch("/tasks/{id}", cts.ServeHTTP)
 	ru := &handler.RegisterUser{
 		Service:   &service.RegisterUser{DB: db, Repo: &r},
 		Validator: v,
