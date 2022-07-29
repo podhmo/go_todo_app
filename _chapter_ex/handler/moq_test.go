@@ -5,9 +5,8 @@ package handler
 
 import (
 	"context"
-	"sync"
-
 	"github.com/budougumi0617/go_todo_app/entity"
+	"sync"
 )
 
 // Ensure, that ListTasksServiceMock does implement ListTasksService.
@@ -143,5 +142,165 @@ func (mock *AddTaskServiceMock) AddTaskCalls() []struct {
 	mock.lockAddTask.RLock()
 	calls = mock.calls.AddTask
 	mock.lockAddTask.RUnlock()
+	return calls
+}
+
+// Ensure, that ChangeTaskStatusServiceMock does implement ChangeTaskStatusService.
+// If this is not the case, regenerate this file with moq.
+var _ ChangeTaskStatusService = &ChangeTaskStatusServiceMock{}
+
+// ChangeTaskStatusServiceMock is a mock implementation of ChangeTaskStatusService.
+//
+// 	func TestSomethingThatUsesChangeTaskStatusService(t *testing.T) {
+//
+// 		// make and configure a mocked ChangeTaskStatusService
+// 		mockedChangeTaskStatusService := &ChangeTaskStatusServiceMock{
+// 			ChangeTaskStatusFunc: func(ctx context.Context, id entity.TaskID, status entity.TaskStatus) (*entity.Task, error) {
+// 				panic("mock out the ChangeTaskStatus method")
+// 			},
+// 		}
+//
+// 		// use mockedChangeTaskStatusService in code that requires ChangeTaskStatusService
+// 		// and then make assertions.
+//
+// 	}
+type ChangeTaskStatusServiceMock struct {
+	// ChangeTaskStatusFunc mocks the ChangeTaskStatus method.
+	ChangeTaskStatusFunc func(ctx context.Context, id entity.TaskID, status entity.TaskStatus) (*entity.Task, error)
+
+	// calls tracks calls to the methods.
+	calls struct {
+		// ChangeTaskStatus holds details about calls to the ChangeTaskStatus method.
+		ChangeTaskStatus []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// ID is the id argument value.
+			ID entity.TaskID
+			// Status is the status argument value.
+			Status entity.TaskStatus
+		}
+	}
+	lockChangeTaskStatus sync.RWMutex
+}
+
+// ChangeTaskStatus calls ChangeTaskStatusFunc.
+func (mock *ChangeTaskStatusServiceMock) ChangeTaskStatus(ctx context.Context, id entity.TaskID, status entity.TaskStatus) (*entity.Task, error) {
+	if mock.ChangeTaskStatusFunc == nil {
+		panic("ChangeTaskStatusServiceMock.ChangeTaskStatusFunc: method is nil but ChangeTaskStatusService.ChangeTaskStatus was just called")
+	}
+	callInfo := struct {
+		Ctx    context.Context
+		ID     entity.TaskID
+		Status entity.TaskStatus
+	}{
+		Ctx:    ctx,
+		ID:     id,
+		Status: status,
+	}
+	mock.lockChangeTaskStatus.Lock()
+	mock.calls.ChangeTaskStatus = append(mock.calls.ChangeTaskStatus, callInfo)
+	mock.lockChangeTaskStatus.Unlock()
+	return mock.ChangeTaskStatusFunc(ctx, id, status)
+}
+
+// ChangeTaskStatusCalls gets all the calls that were made to ChangeTaskStatus.
+// Check the length with:
+//     len(mockedChangeTaskStatusService.ChangeTaskStatusCalls())
+func (mock *ChangeTaskStatusServiceMock) ChangeTaskStatusCalls() []struct {
+	Ctx    context.Context
+	ID     entity.TaskID
+	Status entity.TaskStatus
+} {
+	var calls []struct {
+		Ctx    context.Context
+		ID     entity.TaskID
+		Status entity.TaskStatus
+	}
+	mock.lockChangeTaskStatus.RLock()
+	calls = mock.calls.ChangeTaskStatus
+	mock.lockChangeTaskStatus.RUnlock()
+	return calls
+}
+
+// Ensure, that RegisterUserServiceMock does implement RegisterUserService.
+// If this is not the case, regenerate this file with moq.
+var _ RegisterUserService = &RegisterUserServiceMock{}
+
+// RegisterUserServiceMock is a mock implementation of RegisterUserService.
+//
+// 	func TestSomethingThatUsesRegisterUserService(t *testing.T) {
+//
+// 		// make and configure a mocked RegisterUserService
+// 		mockedRegisterUserService := &RegisterUserServiceMock{
+// 			RegisterUserFunc: func(ctx context.Context, name string, password string, role string) (*entity.User, error) {
+// 				panic("mock out the RegisterUser method")
+// 			},
+// 		}
+//
+// 		// use mockedRegisterUserService in code that requires RegisterUserService
+// 		// and then make assertions.
+//
+// 	}
+type RegisterUserServiceMock struct {
+	// RegisterUserFunc mocks the RegisterUser method.
+	RegisterUserFunc func(ctx context.Context, name string, password string, role string) (*entity.User, error)
+
+	// calls tracks calls to the methods.
+	calls struct {
+		// RegisterUser holds details about calls to the RegisterUser method.
+		RegisterUser []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Name is the name argument value.
+			Name string
+			// Password is the password argument value.
+			Password string
+			// Role is the role argument value.
+			Role string
+		}
+	}
+	lockRegisterUser sync.RWMutex
+}
+
+// RegisterUser calls RegisterUserFunc.
+func (mock *RegisterUserServiceMock) RegisterUser(ctx context.Context, name string, password string, role string) (*entity.User, error) {
+	if mock.RegisterUserFunc == nil {
+		panic("RegisterUserServiceMock.RegisterUserFunc: method is nil but RegisterUserService.RegisterUser was just called")
+	}
+	callInfo := struct {
+		Ctx      context.Context
+		Name     string
+		Password string
+		Role     string
+	}{
+		Ctx:      ctx,
+		Name:     name,
+		Password: password,
+		Role:     role,
+	}
+	mock.lockRegisterUser.Lock()
+	mock.calls.RegisterUser = append(mock.calls.RegisterUser, callInfo)
+	mock.lockRegisterUser.Unlock()
+	return mock.RegisterUserFunc(ctx, name, password, role)
+}
+
+// RegisterUserCalls gets all the calls that were made to RegisterUser.
+// Check the length with:
+//     len(mockedRegisterUserService.RegisterUserCalls())
+func (mock *RegisterUserServiceMock) RegisterUserCalls() []struct {
+	Ctx      context.Context
+	Name     string
+	Password string
+	Role     string
+} {
+	var calls []struct {
+		Ctx      context.Context
+		Name     string
+		Password string
+		Role     string
+	}
+	mock.lockRegisterUser.RLock()
+	calls = mock.calls.RegisterUser
+	mock.lockRegisterUser.RUnlock()
 	return calls
 }
