@@ -3,8 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/budougumi0617/go_todo_app/entity"
+	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -15,8 +17,17 @@ type ChangeTaskStatus struct {
 
 func (h *ChangeTaskStatus) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+
+	id := chi.URLParam(r, "id")
+	taskID, err := strconv.Atoi(id)
+	if err != nil {
+		RespondJSON(ctx, w, &ErrResponse{
+			Message: "not found",
+		}, http.StatusNotFound)
+		return
+	}
+
 	var b struct {
-		ID     entity.TaskID     `json:"id" validate:"required"`
 		Status entity.TaskStatus `json:"status" validate:"required"` // todo: enum
 	}
 	if err := json.NewDecoder(r.Body).Decode(&b); err != nil {
@@ -32,7 +43,7 @@ func (h *ChangeTaskStatus) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t, err := h.Service.ChangeTaskStatus(ctx, b.ID, b.Status)
+	t, err := h.Service.ChangeTaskStatus(ctx, entity.TaskID(taskID), b.Status)
 	if err != nil {
 		RespondJSON(ctx, w, &ErrResponse{
 			Message: err.Error(),

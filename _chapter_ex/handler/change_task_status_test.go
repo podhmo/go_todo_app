@@ -11,6 +11,7 @@ import (
 
 	"github.com/budougumi0617/go_todo_app/entity"
 	"github.com/budougumi0617/go_todo_app/testutil"
+	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -60,7 +61,9 @@ func TestChangeTaskStatus(t *testing.T) {
 				Service:   moq,
 				Validator: validator.New(),
 			}
-			sut.ServeHTTP(w, r)
+			router := chi.NewRouter()
+			router.Patch("/tasks/{id}", sut.ServeHTTP)
+			router.ServeHTTP(w, r)
 
 			resp := w.Result()
 			testutil.AssertResponse(t,
